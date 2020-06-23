@@ -29,28 +29,33 @@ public:
     
     TreeNode* subTree(vector<int>& preorder, vector<int>& inorder,
                         int pre_left,int pre_right,int in_left,
-                        int in_right)
+                        int in_right) /*(vector<int>& preorder, vector<int>& inorder,
+                        int& pre_root,int in_left,
+                        int in_right)*/
     {
-        if(pre_left>pre_right)
+        if(in_left>in_right)
             return nullptr;
         int in_root = in_left;
-        while(inorder[in_root]!=preorder[pre_left]) ++in_root;
+        int pre_root = pre_left;
+        while(inorder[in_root]!=preorder[pre_root]) ++in_root;
         int left_len = in_root-in_left;
-        TreeNode* root = creatTree(preorder[pre_left]);
-        root->left = subTree(preorder,inorder,pre_left+1,
-                            pre_left+left_len,
+        TreeNode* root = creatTree(preorder[pre_root]);
+        //pre_root++;
+        root->left = subTree(preorder,inorder,
+                            pre_left+1,pre_left+left_len,//pre_root,
                             in_left,in_root-1);
         root->right = subTree(preorder,inorder,
-                              pre_left+left_len+1,
-                              pre_right,in_root+1,in_right);
+                              pre_left+left_len+1,pre_right,//pre_root,
+                              in_root+1,in_right);
         return root;
         
     }
     
     TreeNode* buildTree(vector<int>& preorder, 
                         vector<int>& inorder) {
+        /*int pre_root = 0;*/                    
         return subTree(preorder,inorder,
-                        0,preorder.size()-1,
+                        0,preorder.size()-1,//pre_root,
                         0,inorder.size()-1);
     }
 };
